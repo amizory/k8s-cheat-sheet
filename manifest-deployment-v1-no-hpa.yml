@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-demployment
+  labels:
+    app: first-app
+    autor: Dmitry_Sakhno
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      project: testMatchLabels
+  template:
+    metadata:
+      labels:
+        project: testMatchLabels
+    spec:
+      containers:
+        - name: jule10
+          image: amizory/k8s-practice:v1
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+
