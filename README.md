@@ -105,5 +105,7 @@ kubectl rollout restart deployment/<NAME>
 #Delete all pods/deployments
 kubectl delete deployment --all
 
+kubectl delete deployment <NAME_FILE.yml>
+
 kubectl scale deployment --replicas=0 --all
 ```

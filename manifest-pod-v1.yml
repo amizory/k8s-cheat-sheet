@@ -6,11 +6,11 @@ metadata:
     name: Dmitry_Sakhno
 spec:
   containers:
-  - name: test
-    image: amizory/k8s-practice:latest
-    resources:
-      limits:
-        memory: "128Mi"
-        cpu: "500m"
-    ports:
-      - containerPort: 81
+    - name: test
+      image: amizory/k8s-practice:latest
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 81
