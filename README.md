@@ -28,6 +28,9 @@ kubectl [command]
                     describe pod/nodes <NAME> 
                     port-forward <NAME> <LOCAL_PORT>:<CONTAINER_PORT>
                     port-forward <NAME> :<CONTAINER_PORT> ---> add random local port
+
+#Fast IP pods
+kubectl get pod -o jsonpath='{.items[*].status.podIP}'
 ```
 
 ### Manipulation
@@ -102,10 +105,40 @@ kubectl rollout undo deployment/<NAME> --to-revision=<NUMBER>
 #Update version
 kubectl rollout restart deployment/<NAME>
 
-#Delete all pods/deployments
-kubectl delete deployment --all
+#Delete all pods/deployments/hpa
+kubectl delete deploy --all
+
+kubectl delete hpa --all
 
 kubectl delete deployment <NAME_FILE.yml>
 
 kubectl scale deployment --replicas=0 --all
+```
+
+### Services
+
+```sh
+kubectl expose deployment <DEPLOY_NAME> 
+                --type 
+                       ClusterIP     ---> ip inside k8s cluster 
+                       NodePort      ---> port worker nodes
+                       ExternalName  ---> dns name
+                       LoadBalancer  ---> sum ClusterIP/NodePort "cloud clusters"
+                --port <PORT>
+
+#Show service 
+kubectl get svc (allias services)
+
+kubectl get svc <SVC_NAME> -o yaml   ---> more info 
+
+#Delete services
+kubectl delete svc <SVC_NAME>
+
+#Port-forward
+kubectl port-forward svc/<SVC_NAME> <PORT>:<PORT_CONTAINER> &
+
+#Execution
+                            -- curl http://<SVC_NAME>:<PORT_CONTAINER>
+kubectl exec -it <POD_NAME>     
+                            -- curl http://<ClusterIP>:<PORT_CONTAINER>
 ```
