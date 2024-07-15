@@ -1,6 +1,25 @@
 # Kubectl settings (cluster management)
 
-## Basic command
+## Enviroment
+
+### k8s-master
+
+| Syntax | Description |
+| ----------- | ----------- |
+| apiserver | -> external server that handles api requests |
+| control-manager | -> responsible for deployment |
+| etcd | -> database that stores all information about the cluster, nodes, and status |
+| scheduler | -> where the pods will be launched (planning)|
+| cloud-contorller | -> interaction about the cloud (load balancer, disk volumes)|
+
+### k8s-worker
+
+| Syntax | Description |
+| ----------- | ----------- |
+| kubelet | -> monitoring the execution of a task on a node |
+| proxy | -> network connectivity and load balancer |
+| cadvisior | -> information scheduler about the status of the cluster and running processes |
+| pod | -> container or containers|
 
 ### Version/info
 
