@@ -21,13 +21,24 @@
 | cadvisior | -> information scheduler about the status of the cluster and running processes |
 | pod | -> container or containers|
 
+## Approval Cycle (const process)
+
+| ----------- | ----------- |
+| container | -> app |
+| pod | -> object |
+| scheduler | -> planning new pod |
+| replicaset | -> management pod (modife) |
+| deploy | -> control replicas, exe pod-env |
+| service | -> web-proxy/loadbalancer |
+| etcd | -> all info (cluster/depoloy/resources/logs) |
+
 ### Version/info
 
 ```bash
 kubectl [command]
                     version 
                     clusster-info
-                    get componentstatus                   ---> ComponentStatus is deprecated in v1.19+
+                    get componentstatus                 ---> ComponentStatus is deprecated in v1.19+
 ```
 
 ### Viewing
@@ -36,6 +47,8 @@ kubectl [command]
 kubectl [command]
                     get node
                     get pods
+                    get pods --selector <matchLabels-LABELS>=<NAME> app=test
+                    get all
                     logs (-f -> stream) <NAME>
 ```
 
@@ -43,8 +56,8 @@ kubectl [command]
 
 ```bash
 kubectl [command]
-                    describe pod/nodes                    ---> all
-                    describe pod/nodes <NAME> 
+                    describe pod<--->nodes                ---> all
+                    describe pod<--->nodes <NAME> 
                     port-forward <NAME> <LOCAL_PORT>:<CONTAINER_PORT>
                     port-forward <NAME> :<CONTAINER_PORT> ---> add random local port
 
@@ -55,8 +68,9 @@ kubectl get pod -o jsonpath='{.items[*].status.podIP}'
 ### Manipulation
 
 ```sh
-kubectl run <NAME> --image=<ISO:TAG> --port=<CONTAINER_PORT>
+kubectl run <NAME> --image=<ISO:TAG> --port=<CONTAINER_PORT> --> deploy --> pod-object
 kubectl delete pods <NAME>
+kubectl delete all --selector <matchLabels-LABELS>=<NAME> app=test
 kubectl exec -it <NAME> sh (~/bin/bash)
 ```
 
@@ -81,13 +95,13 @@ spec:
 
 ```sh
 #Show delpoy
-kubectl get deploy
+kubectl get deploy (allias deployment)
 
 #Create deploy
 kubectl create deployment <NAME> --image <ISO:TAG>
 
 #Detail information
-kubectl describe deployments <NAME>
+kubectl describe deploy <NAME>
 
 #Scale (replicas)
 kubectl scale deployment <NAME> --replicas <NUMBER>
