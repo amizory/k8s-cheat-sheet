@@ -23,6 +23,7 @@
 
 ## Approval Cycle (const process)
 
+| Unit | Purpose |
 | ----------- | ----------- |
 | container | -> app |
 | pod | -> object |
@@ -45,11 +46,14 @@ kubectl [command]
 
 ```bash
 kubectl [command]
-                    get node
-                    get pods
-                    get pods --selector <matchLabels-LABELS>=<NAME> app=test
-                    get all
-                    logs (-f -> stream) <NAME>
+                        namespace 
+                        node
+                  get   pods
+                        pods --selector <matchLabels-LABELS>=<NAME> app=test
+                        pods --namespace <TEXT>
+                        all
+                     
+                  logs (-f -> stream) <NAME>
 ```
 
 ### Inside
@@ -74,12 +78,21 @@ kubectl delete all --selector <matchLabels-LABELS>=<NAME> app=test
 kubectl exec -it <NAME> sh (~/bin/bash)
 ```
 
+### Recourcequotas && LimitRange
+
+```sh
+kubectl get recourcequotas -n <NAMESPACE>
+kubectl describe resourcequota <NAME-RSQ> -n <NAMESPACE>
+kubectl apply --namespace <TEXT> -f RSQ.yml/LMTRNG.yml
+```
+
 ### Simple manifest (pod)
 
 ```yml
 apiVersion: v1
 kind: Pod
 metadata:
+    namespace: my-namespace
     name: testapp
     label:
         author: Dmitry

@@ -23,6 +23,11 @@ spec:
         - name: lorem
           image: amizory/k8s-practice:latest
           resources:
+            # Запрос ресурсов
+            # requests:
+            #   memory: "128Mi"
+            #   cpu: "500m"
+            # Лимит ресурсов
             limits:
               memory: "128Mi"
               cpu: "500m"

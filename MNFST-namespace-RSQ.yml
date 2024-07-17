@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: <RSQ>
+  namespace: <TEXT>
+spec:
+  hard:
+    pods: "10"
+    requests.cpu: 100m
+    requests.memory: 512Mi
+    limits.cpu: 200m
+    limits.memory: 1Gi
