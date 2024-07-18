@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-test-v1
+  labels:
+    name: ingress-test
+spec:
+  rules:
+    - host: version1.default.svc.cluster.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: version1
+                port:
+                  number: 80
+    - host: version2.default.svc.cluster.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: version2
+                port:
+                  number: 80
+    - host: version3.default.svc.cluster.local
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: version3
+                port:
+                  number: 80

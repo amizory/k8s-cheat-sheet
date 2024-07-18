@@ -39,7 +39,8 @@
 kubectl [command]
                     version 
                     clusster-info
-                    get componentstatus                 ---> ComponentStatus is deprecated in v1.19+
+                    delete -f <NAMEFILE>.yml
+                    get componentstatus     ---> ComponentStatus is deprecated in v1.19+
 ```
 
 ### Viewing
@@ -51,6 +52,7 @@ kubectl [command]
                   get   pods
                         pods --selector <matchLabels-LABELS>=<NAME> app=test
                         pods --namespace <TEXT>
+                        pods -A
                         all
                      
                   logs (-f -> stream) <NAME>
@@ -74,16 +76,33 @@ kubectl get pod -o jsonpath='{.items[*].status.podIP}'
 ```sh
 kubectl run <NAME> --image=<ISO:TAG> --port=<CONTAINER_PORT> --> deploy --> pod-object
 kubectl delete pods <NAME>
-kubectl delete all --selector <matchLabels-LABELS>=<NAME> app=test
+kubectl delete all --selector <matchLabels-LABELS>=<NAME> (app=test)
 kubectl exec -it <NAME> sh (~/bin/bash)
 ```
 
-### Recourcequotas && LimitRange
+### Namespace
+
+```yml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <NAMESPACE>
+```
+
+---
+
+```sh
+kubectl get namespace 
+kubectl get pods --namespace=<NAMESPACE>
+kubectl -n <NAMESPACE> get pod -o yaml
+```
+
+### Recourcequotas && LimitRange --> Namespace
 
 ```sh
 kubectl get recourcequotas -n <NAMESPACE>
 kubectl describe resourcequota <NAME-RSQ> -n <NAMESPACE>
-kubectl apply --namespace <TEXT> -f RSQ.yml/LMTRNG.yml
+kubectl apply --namespace <NAMESPACE> -f RSQ.yml/LMTRNG.yml
 ```
 
 ### Simple manifest (pod)
@@ -109,31 +128,26 @@ spec:
 ```sh
 #Show delpoy
 kubectl get deploy (allias deployment)
+kubectl get deploy -A
+kubectl get deploy -n <NAMESPACE>
 
 #Create deploy
 kubectl create deployment <NAME> --image <ISO:TAG>
+kubectl apply -f <NAME_DEPLOY>.yml -n <NAMESPACE>
 
 #Detail information
 kubectl describe deploy <NAME>
 
-#Scale (replicas)
+#Scale (replicas) / Show replica set
 kubectl scale deployment <NAME> --replicas <NUMBER>
-
-#Stop all replicas
-kubectl scale deployment --replicas=0 --all
-
-#Show replica set
 kubectl get rs
 
-#Horizontal scale
+#Horizontal scale / Show horizontal set
 kuberctl autoscale deployment <NAME> --min=<NUMBER> --max=<NUMBER> --cpu-percent=<NUMBER>
-
-#Show horizontal set
 kubectl get hpa
 
 #History / status demploy
 kubectl rollout history deployment/<NAME>
-
 kubectl rollout status deployment/<NAME>
 
 #Change version
@@ -151,7 +165,7 @@ kubectl rollout undo deployment/<NAME> --to-revision=<NUMBER>
 #Update version
 kubectl rollout restart deployment/<NAME>
 
-#Delete all pods/deployments/hpa
+#Delete/stop all pods/deployments/hpa
 kubectl delete deploy --all
 
 kubectl delete hpa --all
@@ -173,8 +187,8 @@ kubectl expose deployment <DEPLOY_NAME>
                 --port <PORT>
 
 #Show service 
+kubectl get svc -A
 kubectl get svc (allias services)
-
 kubectl get svc <SVC_NAME> -o yaml   ---> more info 
 
 #Delete services
@@ -187,4 +201,19 @@ kubectl port-forward svc/<SVC_NAME> <PORT>:<PORT_CONTAINER> &
                             -- curl http://<SVC_NAME>:<PORT_CONTAINER>
 kubectl exec -it <POD_NAME>     
                             -- curl http://<ClusterIP>:<PORT_CONTAINER>
+```
+
+### Ingress rules
+
+```sh
+  ---> deploy + svc + scale (N times)
+
+kubectl get ing (allias ingress)
+kubectl decribe ing (NAME_INGRESS)
+
+  ---> if use localhost 
+
+  kubectl run -i --tty curl-pod --image=curlimages/curl --restart=Never -- sleep infinityleep infinity
+
+  kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.default.svc.cluster.local
 ```
