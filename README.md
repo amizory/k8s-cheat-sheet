@@ -40,6 +40,8 @@ kubectl [command]
                     version 
                     clusster-info
                     delete -f <NAMEFILE>.yml
+                    edit <TYPE> <NAME>      ---> rework in txt file
+                    diff -f <NAMEFILE>.yml
                     get componentstatus     ---> ComponentStatus is deprecated in v1.19+
 ```
 
@@ -49,19 +51,20 @@ kubectl [command]
 kubectl [command]
                         namespace 
                         node
-                  get   pods
-                        pods --selector <matchLabels-LABELS>=<NAME> app=test
-                        pods --namespace <TEXT>
+                        pods -o wide/yaml/json
+                  get   pods --selector (-l) <matchLabels-LABELS>=<NAME> app=test
+                        pods --namespace (-n) <TEXT>
                         pods -A
                         all
                      
-                  logs (-f -> stream) <NAME>
+                  logs (-f -> stream, --tail=<NUMBER> -> last process, -c -> container <NAME>) <NAME>
+                  get pods --watch (-w -> stream)
 ```
 
 ### Inside
 
 ```bash
-kubectl [command]
+kubectl [command]   
                     describe pod<--->nodes                ---> all
                     describe pod<--->nodes <NAME> 
                     port-forward <NAME> <LOCAL_PORT>:<CONTAINER_PORT>
@@ -75,9 +78,12 @@ kubectl get pod -o jsonpath='{.items[*].status.podIP}'
 
 ```sh
 kubectl run <NAME> --image=<ISO:TAG> --port=<CONTAINER_PORT> --> deploy --> pod-object
+kubectl run <NAME> --image=<ISO:TAG> --dry-run=client -o yaml --> create manifest
 kubectl delete pods <NAME>
 kubectl delete all --selector <matchLabels-LABELS>=<NAME> (app=test)
+kubectl attach <NAME>
 kubectl exec -it <NAME> sh (~/bin/bash)
+kubectl exec -it <NAME> -c <NAMECONTAINER> sh 
 ```
 
 ### Namespace
@@ -88,8 +94,6 @@ kind: Namespace
 metadata:
   name: <NAMESPACE>
 ```
-
----
 
 ```sh
 kubectl get namespace 
@@ -127,7 +131,7 @@ spec:
 
 ```sh
 #Show delpoy
-kubectl get deploy (allias deployment)
+kubectl get deploy (alias deployment)
 kubectl get deploy -A
 kubectl get deploy -n <NAMESPACE>
 
@@ -188,7 +192,7 @@ kubectl expose deployment <DEPLOY_NAME>
 
 #Show service 
 kubectl get svc -A
-kubectl get svc (allias services)
+kubectl get svc (alias services)
 kubectl get svc <SVC_NAME> -o yaml   ---> more info 
 
 #Delete services
@@ -208,12 +212,12 @@ kubectl exec -it <POD_NAME>
 ```sh
   ---> deploy + svc + scale (N times)
 
-kubectl get ing (allias ingress)
+kubectl get ing (alias ingress)
 kubectl decribe ing (NAME_INGRESS)
 
   ---> if use localhost 
 
   kubectl run -i --tty curl-pod --image=curlimages/curl --restart=Never -- sleep infinityleep infinity
 
-  kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.default.svc.cluster.local
+  kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.<NAMESPACE>.svc.cluster.local
 ```

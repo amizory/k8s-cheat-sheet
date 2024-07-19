@@ -1,1 +1,49 @@
-kuber
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels:
+    app: first-app
+    autor: Dmitry_Sakhno
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+        - name: jule11
+          image: amizory/k8s-practice:v1
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-app-vpa
+spec:
+  targetRef:  
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: test-deployment
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: jule11
+        resources:
+          requests:
+            cpu:
+              max: 500m
+              min: 100m
+            memory:
+              max: 1024Mi
+              min: 128Mi
