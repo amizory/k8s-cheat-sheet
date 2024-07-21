@@ -221,3 +221,17 @@ kubectl decribe ing (NAME_INGRESS)
 
   kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.<NAMESPACE>.svc.cluster.local
 ```
+
+### Busybox
+
+```sh
+kubectl run <NAME> --image=busybox:latest --rm -it --restart=Never --command
+      nslookup <TYPE> ---> 
+                            Server:         10.X.X.X
+                            Address:        10.X.X.X:53
+                            Name:   test.default.svc.cluster.local
+                            Address: 10.X.X.X
+      wget -qO- http://test:80 ---> view content
+      sh -> ash
+alias krbb
+```
