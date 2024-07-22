@@ -43,7 +43,7 @@ kubectl [command]
                     edit <TYPE> <NAME>      ---> rework in txt file
                     diff -f <NAMEFILE>.yml
                     get componentstatus     ---> ComponentStatus is deprecated in v1.19+
-```
+                    
 
 ### Viewing
 
@@ -225,8 +225,8 @@ kubectl decribe ing (NAME_INGRESS)
 ### Busybox
 
 ```sh
-kubectl run <NAME> --image=busybox:latest --rm -it --restart=Never --command
-      nslookup <TYPE> ---> 
+kubectl run busybox --image=busybox:latest --rm -it --restart=Never --command
+      nslookup <NAME> --->  test
                             Server:         10.X.X.X
                             Address:        10.X.X.X:53
                             Name:   test.default.svc.cluster.local
@@ -234,4 +234,78 @@ kubectl run <NAME> --image=busybox:latest --rm -it --restart=Never --command
       wget -qO- http://test:80 ---> view content
       sh -> ash
 alias krbb
+```
+
+### Context (cluster + namespace + user)
+
+```sh
+kubectl config get-contexts                                                            ---> info
+kubectl config current-context
+kubectl config use-context <NAME>                                                      ---> swap
+kubectl config set-context <NAME> --cluser=<NAME_CLUSTER> --namespace=<NAME_NAMESPACE> ---> create
+
+---> kubectx 
+kubectx -
+kubectx <NAME_CONTEXT>
+kubectx -> list
+
+---> kubens
+kubens -
+kubens <NAME_NAMESPACE>
+kubens -> list
+```
+
+### Security capabilities
+
+```yml
+apiVersion: v1
+kind: Pod
+metadata:
+    namespace: 
+    name: 
+spec:
+    containers:
+    - name: 
+      image:
+      securityContext:
+        drop: ["CHOWN", "NET_RAW", "SETFCAP"]
+        #drop: ["all"]
+        add: ["NET_ADMIT"] #capabilities which are not granted by default and may be added
+      ports:
+        - containerPort: 
+```
+
+| Capabilities | Definition |
+| ----------- | ----------- |
+| CHOWN | -> Make arbitrary changes to file UIDs and GIDs |
+| DAC_OVERRIDE | -> Bypassing file read, write, and execute permission checks |
+| FSETID | ->  Save SUID and SGID bits when changing files |
+| FOWNER | ->  It is necessary to provide access to files for processes that are not the owners of the files |
+| MKNOD | ->  Create special files using mknod(2) |
+| NET_RAW | -> Use RAW (IP, ICMP) and PACKET (app -> network) sockets; bind to any address for transparent proxying. |
+| SETGID | -> Make arbitrary manipulations of process GIDs and supplementary GID list |
+| SETUID | -> Make arbitrary manipulations of process UIDs |
+| SETFCAP | -> Set file capabilities |
+| SETPCAP | -> Фllows a process to manipulate the allowed set of capabilities of another process |
+| NET_BIND_SERVICE | -> Bind a socket to Internet domain privileged ports (port numbers less than 1024) |
+| SYS_CHROOT | -> This feature allows a process to use the chroot(2) system call to change the root directory |
+| KILL | -> Bypass permission checks for sending signals |
+| AUDIT_WRITE | -> This feature allows the process to write entries to the kernel audit log |
+
+```yml
+spec:
+  serviceAccountName: amizory        #definitive user
+  #POD LEVEL
+  #securityContext:                  #CONTAINER LEVEL
+        #runAsUser: 1000                 
+        #runAsNonRoot: false                  
+        #allowPrivilegeEscalation: false 
+  containers:
+    - name: test
+      image: amizory/k8s-practice:latest
+      securityContext:                  #CONTAINER LEVEL
+        runAsUser: 1000                 #run without root access
+        runAsNonRoot: true              #cancel if app use root permission
+        readOnlyRootFilesystem: true    #overwriting the file system
+        allowPrivilegeEscalation: false #off privilege enhancement
 ```
