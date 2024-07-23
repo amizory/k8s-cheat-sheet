@@ -207,21 +207,6 @@ kubectl exec -it <POD_NAME>
                             -- curl http://<ClusterIP>:<PORT_CONTAINER>
 ```
 
-### Ingress rules
-
-```sh
-  ---> deploy + svc + scale (N times)
-
-kubectl get ing (alias ingress)
-kubectl decribe ing (NAME_INGRESS)
-
-  ---> if use localhost 
-
-  kubectl run -i --tty curl-pod --image=curlimages/curl --restart=Never -- sleep infinityleep infinity
-
-  kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.<NAMESPACE>.svc.cluster.local
-```
-
 ### Busybox
 
 ```sh
@@ -234,6 +219,21 @@ kubectl run busybox --image=busybox:latest --rm -it --restart=Never --command
       wget -qO- http://test:80 ---> view content
       sh -> ash
 alias krbb
+```
+
+### Ingress rules
+
+```sh
+  ---> deploy + svc + scale (N times)
+
+kubectl get ing (alias ingress)
+kubectl decribe ing (NAME_INGRESS)
+
+  ---> if use localhost 
+
+  kubectl run -i --rm --tty curl-pod --image=curlimages/curl --restart=Never -- sleep infinityleep infinity
+
+  kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.<NAMESPACE>.svc.cluster.local
 ```
 
 ### Context (cluster + namespace + user)
@@ -308,4 +308,19 @@ spec:
         runAsNonRoot: true              #cancel if app use root permission
         readOnlyRootFilesystem: true    #overwriting the file system
         allowPrivilegeEscalation: false #off privilege enhancement
+```
+
+### Helm (package manager)
+
+```sh
+helm [command] 
+              version
+              package <PATH> ---> .tgz
+              search hub <NAMECHART>
+              search repo (example - 'bitnami')
+
+helm install <NAME> ./<PATH> 
+helm install <NAME> ./<PATH> -f some-values.yaml
+
+helm upgrade <NAME> ./<PATH> --set replicaCount=2
 ```

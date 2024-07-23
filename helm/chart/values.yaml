@@ -1,0 +1,5 @@
+replicaCount: 3
+containers:
+  image: amizory/k8s-practice:v3
+ports:
+  containerPort: 80
