@@ -16,7 +16,7 @@
 * [Security Capabilities](#security-capabilities)
 * [Helm (package manager)](#helm)
 
-## <a id="k8s-settings">Kubectl settings (cluster management) </a>
+## <a id="k8s-settings">Kubectl settings (cluster management)</a>
 
 ### k8s-master
 
@@ -37,7 +37,7 @@
 | cadvisior | -> information scheduler about the status of the cluster and running processes |
 | pod | -> container or containers|
 
-## Approval Cycle (const process) {#approval-cycle}
+## <a id="approval-cycle">Approval Cycle (const process)</a>
 
 | Unit | Purpose |
 | ----------- | ----------- |
@@ -49,7 +49,7 @@
 | service | -> web-proxy/loadbalancer |
 | etcd | -> all info (cluster/depoloy/resources/logs) |
 
-### Version/info {#version}
+### <a id="version">Version/info</a>
 
 ```bash
 kubectl [command]
@@ -64,7 +64,7 @@ kubectl [command]
                     
 ```
 
-### Viewing {#viewing}
+### <a id="viewing">Viewing</a>
 
 ```bash
 kubectl [command]
@@ -80,7 +80,7 @@ kubectl [command]
                   get pods --watch (-w -> stream)
 ```
 
-### Inside {#inside}
+### <a id="inside">Inside</a>
 
 ```bash
 kubectl [command]   
@@ -93,7 +93,7 @@ kubectl [command]
 kubectl get pod -o jsonpath='{.items[*].status.podIP}'
 ```
 
-### Manipulation {#manipulation}
+### <a id="manipulation">Manipulation</a>
 
 ```sh
 kubectl run <NAME> --image=<ISO:TAG> --port=<CONTAINER_PORT> --> deploy --> pod-object
@@ -105,7 +105,7 @@ kubectl exec -it <NAME> sh (~/bin/bash)
 kubectl exec -it <NAME> -c <NAMECONTAINER> sh 
 ```
 
-### Namespace {#namespace}
+### <a id="namespace">Namespace</a>
 
 ```yml
 apiVersion: v1
@@ -120,7 +120,7 @@ kubectl get pods --namespace=<NAMESPACE>
 kubectl -n <NAMESPACE> get pod -o yaml
 ```
 
-### Recourcequotas && LimitRange --> Namespace {#resource-quotas}
+### <a id="resource-quotas">Recourcequotas && LimitRange --> Namespace </a>
 
 ```sh
 kubectl get recourcequotas -n <NAMESPACE>
@@ -146,7 +146,7 @@ spec:
         - containerPort: 666
 ```
 
-### Demployment {#deployment}
+### <a id="deployment">Demployment</a>
 
 ```sh
 #Show delpoy
@@ -198,7 +198,7 @@ kubectl delete deployment <NAME_FILE.yml>
 kubectl scale deployment --replicas=0 --all
 ```
 
-### Services {#services}
+### <a id="services">Services</a>
 
 ```sh
 kubectl expose deployment <DEPLOY_NAME> 
@@ -226,7 +226,7 @@ kubectl exec -it <POD_NAME>
                             -- curl http://<ClusterIP>:<PORT_CONTAINER>
 ```
 
-### Busybox {#busybox}
+### <a id="busybox">Busybox</a>
 
 ```sh
 kubectl run busybox --image=busybox:latest --rm -it --restart=Never --command
@@ -240,7 +240,7 @@ kubectl run busybox --image=busybox:latest --rm -it --restart=Never --command
 alias krbb
 ```
 
-### Ingress rules {#ingress-rules}
+### <a id="ingress-rules">Ingress rules</a>
 
 ```sh
   ---> deploy + svc + scale (N times)
@@ -255,7 +255,7 @@ kubectl decribe ing (NAME_INGRESS)
   kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.<NAMESPACE>.svc.cluster.local
 ```
 
-### Context (cluster + namespace + user) {#context}
+### <a id="context">Context (cluster + namespace + user)</a>
 
 ```sh
 kubectl config get-contexts                                                            ---> info
@@ -274,7 +274,7 @@ kubens <NAME_NAMESPACE>
 kubens -> list
 ```
 
-### Security capabilities {#security-capabilities}
+### <a id="security-capabilities">Security capabilities</a>
 
 ```yml
 apiVersion: v1
@@ -329,7 +329,7 @@ spec:
         allowPrivilegeEscalation: false #off privilege enhancement
 ```
 
-### Helm (package manager) {#helm}
+### <a id="helm">Helm (package manager)</a>
 
 ```sh
 helm [command] 
