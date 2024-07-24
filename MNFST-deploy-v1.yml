@@ -4,9 +4,15 @@ metadata:
   name: test-deployment
   labels:
     app: first-app
-    autor: Dmitry_Sakhno
+  annotations:
+    author: Dmitry_Sakhno
 spec:
   replicas: 5
+  strategy: #определяет стратегию развертывания
+    type: RollingUpdate #тип стратегии
+    rollingUpdate: #определяет стратегию обновления
+      maxSurge: 1 #максимальное кол-во модулей созданных сверх желаемого кол-ва реплик во время обновления, default 25%
+      maxUnavailable: 0 #максимальное кол-во модулей недоступных во время обновления, default 25%
   selector:
     matchLabels:
       project: testMatchLabels
