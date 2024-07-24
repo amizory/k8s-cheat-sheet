@@ -1,22 +1,22 @@
 # Table of Contents
 
-* (Kubectl Settings (Cluster Management))(#k8s-settings)
-* (Approval Cycle (Const Process))(#approval-cycle)
-* (Version/info)(#version)
-* (Viewing)(#viewing)
-* (Inside)(#inside)
-* (Manipulation)(#manipulation)
-* (Namespace)(#namespace)
-* (Resource Quotas and Limit Ranges)(#resource-quotas)
-* (Deployment)(#deployment)
-* (Services)(#services)
-* (Busybox)(#busybox)
-* (Ingress Rules)(#ingress-rules)
-* (Context)(#context)
-* (Security Capabilities)(#security-capabilities)
-* (Helm (package manager))(#helm)
+* [Kubectl Settings (Cluster Management)](#k8s-settings)
+* [Approval Cycle (Const Process)](#approval-cycle)
+* [Version/info](#version)
+* [Viewing](#viewing)
+* [Inside](#inside)
+* [Manipulation](#manipulation)
+* [Namespace](#namespace)
+* [Resource Quotas and Limit Ranges](#resource-quotas)
+* [Deployment](#deployment)
+* [Services](#services)
+* [Busybox](#busybox)
+* [Ingress Rules](#ingress-rules)
+* [Context](#context)
+* [Security Capabilities](#security-capabilities)
+* [Helm (package manager)](#helm)
 
-## Kubectl settings (cluster management) {#k8s-settings}
+## <a id="k8s-settings">Kubectl settings (cluster management) </a>
 
 ### k8s-master
 
