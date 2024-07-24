@@ -5,19 +5,21 @@ metadata:
   labels:
     name: Dmitry_Sakhno
 spec:
-  serviceAccountName: amizory        #definitive user
+  serviceAccountName: amizory #definitive user
+  nodeSelector:
+    test: Hello
   #POD LEVEL
   #securityContext:                  #CONTAINER LEVEL
-        #runAsUser: 1000                 
-        #runAsNonRoot: false                  
-        #allowPrivilegeEscalation: false 
+  #runAsUser: 1000
+  #runAsNonRoot: false
+  #allowPrivilegeEscalation: false
   containers:
     - name: test
       image: amizory/k8s-practice:latest
-      securityContext:                  #CONTAINER LEVEL
-        runAsUser: 1000                 #run without root access
-        runAsNonRoot: true              #cancel if app use root permission
-        readOnlyRootFilesystem: true    #overwriting the file system
+      securityContext: #CONTAINER LEVEL
+        runAsUser: 1000 #run without root access
+        runAsNonRoot: true #cancel if app use root permission
+        readOnlyRootFilesystem: true #overwriting the file system
         allowPrivilegeEscalation: false #off privilege enhancement
       resources:
         limits:

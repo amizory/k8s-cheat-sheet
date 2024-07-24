@@ -1,6 +1,22 @@
-# Kubectl settings (cluster management)
+# Table of Contents
 
-## Enviroment
+* [Kubectl Settings (Cluster Management)](#k8s-settings)
+* [Approval Cycle (Const Process)](#approval-cycle)
+* [Version/info](#version)
+* [Viewing](#viewing)
+* [Inside](#inside)
+* [Manipulation](#manipulation)
+* [Namespace](#namespace)
+* [Resource Quotas and Limit Ranges](#resource-quotas)
+* [Deployment](#deployment)
+* [Services](#services)
+* [Busybox](#busybox)
+* [Ingress Rules](#ingress-rules)
+* [Context](#context)
+* [Security Capabilities](#security-capabilities)
+* [Helm (package manager)](#helm)
+
+## Kubectl settings (cluster management) {#k8s-settings}
 
 ### k8s-master
 
@@ -21,19 +37,19 @@
 | cadvisior | -> information scheduler about the status of the cluster and running processes |
 | pod | -> container or containers|
 
-## Approval Cycle (const process)
+## Approval Cycle (const process) {#approval-cycle}
 
 | Unit | Purpose |
 | ----------- | ----------- |
 | container | -> app |
-| pod | -> object |
+| pod | -> object (module) |
 | scheduler | -> planning new pod |
 | replicaset | -> management pod (modife) |
 | deploy | -> control replicas, exe pod-env |
 | service | -> web-proxy/loadbalancer |
 | etcd | -> all info (cluster/depoloy/resources/logs) |
 
-### Version/info
+### Version/info {#version}
 
 ```bash
 kubectl [command]
@@ -43,9 +59,12 @@ kubectl [command]
                     edit <TYPE> <NAME>      ---> rework in txt file
                     diff -f <NAMEFILE>.yml
                     get componentstatus     ---> ComponentStatus is deprecated in v1.19+
+                    label <TYPE> <LABELS>=<NAME>
+                    annotate <TYPE> <TEXT>=<TEXT>
                     
+```
 
-### Viewing
+### Viewing {#viewing}
 
 ```bash
 kubectl [command]
@@ -53,15 +72,15 @@ kubectl [command]
                         node
                         pods -o wide/yaml/json
                   get   pods --selector (-l) <matchLabels-LABELS>=<NAME> app=test
-                        pods --namespace (-n) <TEXT>
+                        pods --namespace (-n) <TEXT> --show-labels
                         pods -A
                         all
                      
-                  logs (-f -> stream, --tail=<NUMBER> -> last process, -c -> container <NAME>) <NAME>
+                  logs (-f -> stream, --tail=<NUMBER> -> last process, -c -> --container <NAME>) <NAME>
                   get pods --watch (-w -> stream)
 ```
 
-### Inside
+### Inside {#inside}
 
 ```bash
 kubectl [command]   
@@ -74,7 +93,7 @@ kubectl [command]
 kubectl get pod -o jsonpath='{.items[*].status.podIP}'
 ```
 
-### Manipulation
+### Manipulation {#manipulation}
 
 ```sh
 kubectl run <NAME> --image=<ISO:TAG> --port=<CONTAINER_PORT> --> deploy --> pod-object
@@ -86,7 +105,7 @@ kubectl exec -it <NAME> sh (~/bin/bash)
 kubectl exec -it <NAME> -c <NAMECONTAINER> sh 
 ```
 
-### Namespace
+### Namespace {#namespace}
 
 ```yml
 apiVersion: v1
@@ -101,7 +120,7 @@ kubectl get pods --namespace=<NAMESPACE>
 kubectl -n <NAMESPACE> get pod -o yaml
 ```
 
-### Recourcequotas && LimitRange --> Namespace
+### Recourcequotas && LimitRange --> Namespace {#resource-quotas}
 
 ```sh
 kubectl get recourcequotas -n <NAMESPACE>
@@ -127,7 +146,7 @@ spec:
         - containerPort: 666
 ```
 
-### Demployment
+### Demployment {#deployment}
 
 ```sh
 #Show delpoy
@@ -156,7 +175,7 @@ kubectl rollout status deployment/<NAME>
 
 #Change version
 #CONTAINER_NAME ---> kubectl describe deployment <NAME>
-kubectl set image deployment/<NAME> <CONTAINER_NAME>=<amizory/k8s-practice:latest> --record
+kubectl set image deployment/<NAME> <CONTAINER_NAME>=amizory/k8s-practice:latest --record
 
 #Change-cause
 kubectl annotate deployment <NAME> kubernetes.io/change-cause="<TEXT>"
@@ -179,7 +198,7 @@ kubectl delete deployment <NAME_FILE.yml>
 kubectl scale deployment --replicas=0 --all
 ```
 
-### Services
+### Services {#services}
 
 ```sh
 kubectl expose deployment <DEPLOY_NAME> 
@@ -207,7 +226,7 @@ kubectl exec -it <POD_NAME>
                             -- curl http://<ClusterIP>:<PORT_CONTAINER>
 ```
 
-### Busybox
+### Busybox {#busybox}
 
 ```sh
 kubectl run busybox --image=busybox:latest --rm -it --restart=Never --command
@@ -221,7 +240,7 @@ kubectl run busybox --image=busybox:latest --rm -it --restart=Never --command
 alias krbb
 ```
 
-### Ingress rules
+### Ingress rules {#ingress-rules}
 
 ```sh
   ---> deploy + svc + scale (N times)
@@ -236,7 +255,7 @@ kubectl decribe ing (NAME_INGRESS)
   kubectl exec -it curl-pod -- curl -v http://<NAME_SVC>.<NAMESPACE>.svc.cluster.local
 ```
 
-### Context (cluster + namespace + user)
+### Context (cluster + namespace + user) {#context}
 
 ```sh
 kubectl config get-contexts                                                            ---> info
@@ -255,7 +274,7 @@ kubens <NAME_NAMESPACE>
 kubens -> list
 ```
 
-### Security capabilities
+### Security capabilities {#security-capabilities}
 
 ```yml
 apiVersion: v1
@@ -310,7 +329,7 @@ spec:
         allowPrivilegeEscalation: false #off privilege enhancement
 ```
 
-### Helm (package manager)
+### Helm (package manager) {#helm}
 
 ```sh
 helm [command] 
