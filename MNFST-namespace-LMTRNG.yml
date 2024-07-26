@@ -4,12 +4,10 @@ metadata:
   name: <TEXT>
 spec:
   limits:
-   - type: Container
-     default:
-      cpu: "500m"
-      memory: "256Mi"
-     defaultRequest:
-      cpu: "200m"
-      memory: "128Mi"
-
-
+    - type: Container
+      default:
+        cpu: "500m"
+        memory: "256Mi"
+      defaultRequest:
+        cpu: "200m"
+        memory: "128Mi"

@@ -22,11 +22,11 @@
 
 | Syntax | Description |
 | ----------- | ----------- |
-| apiserver | -> external server that handles api requests |
+| api-server | -> external server that handles api requests |
 | control-manager | -> responsible for deployment |
 | etcd | -> database that stores all information about the cluster, nodes, and status |
 | scheduler | -> where the pods will be launched (planning)|
-| cloud-contorller | -> interaction about the cloud (load balancer, disk volumes)|
+| cloud-controller | -> interaction about the cloud (load balancer, disk volumes)|
 
 ### k8s-worker
 
@@ -44,17 +44,17 @@
 | container | -> app |
 | pod | -> object (module) |
 | scheduler | -> planning new pod |
-| replicaset | -> management pod (modife) |
+| replicaset | -> management pod (modify) |
 | deploy | -> control replicas, exe pod-env |
 | service | -> web-proxy/loadbalancer |
-| etcd | -> all info (cluster/depoloy/resources/logs) |
+| etcd | -> all info (cluster/deploy/resources/logs) |
 
 ### <a id="version">Version/info</a>
 
 ```bash
 kubectl [command]
                     version 
-                    clusster-info
+                    cluster-info
                     delete -f <NAMEFILE>.yml
                     edit <TYPE> <NAME>      ---> rework in txt file
                     diff -f <NAMEFILE>.yml
@@ -101,8 +101,8 @@ kubectl run <NAME> --image=<ISO:TAG> --dry-run=client -o yaml --> create manifes
 kubectl delete pods <NAME>
 kubectl delete all --selector <matchLabels-LABELS>=<NAME> (app=test)
 kubectl attach <NAME>
-kubectl exec -it <NAME> sh (~/bin/bash)
-kubectl exec -it <NAME> -c <NAMECONTAINER> sh 
+kubectl exec -it <NAME> -- [COMMAND] 
+kubectl exec -it <NAME> -c <NAMECONTAINER> -- sh (~/bin/bash) 
 ```
 
 ### <a id="namespace">Namespace</a>
@@ -146,10 +146,10 @@ spec:
         - containerPort: 666
 ```
 
-### <a id="deployment">Demployment</a>
+### <a id="deployment">Deployment</a>
 
 ```sh
-#Show delpoy
+#Show deploy
 kubectl get deploy (alias deployment)
 kubectl get deploy -A
 kubectl get deploy -n <NAMESPACE>
@@ -166,10 +166,10 @@ kubectl scale deployment <NAME> --replicas <NUMBER>
 kubectl get rs
 
 #Horizontal scale / Show horizontal set
-kuberctl autoscale deployment <NAME> --min=<NUMBER> --max=<NUMBER> --cpu-percent=<NUMBER>
+kubectl autoscale deployment <NAME> --min=<NUMBER> --max=<NUMBER> --cpu-percent=<NUMBER>
 kubectl get hpa
 
-#History / status demploy
+#History / status deploy
 kubectl rollout history deployment/<NAME>
 kubectl rollout status deployment/<NAME>
 
@@ -246,7 +246,7 @@ alias krbb
   ---> deploy + svc + scale (N times)
 
 kubectl get ing (alias ingress)
-kubectl decribe ing (NAME_INGRESS)
+kubectl describe ing (NAME_INGRESS)
 
   ---> if use localhost 
 
@@ -261,7 +261,7 @@ kubectl decribe ing (NAME_INGRESS)
 kubectl config get-contexts                                                            ---> info
 kubectl config current-context
 kubectl config use-context <NAME>                                                      ---> swap
-kubectl config set-context <NAME> --cluser=<NAME_CLUSTER> --namespace=<NAME_NAMESPACE> ---> create
+kubectl config set-context <NAME> --cluster=<NAME_CLUSTER> --namespace=<NAME_NAMESPACE> ---> create
 
 ---> kubectx 
 kubectx -
@@ -301,11 +301,11 @@ spec:
 | FSETID | ->  Save SUID and SGID bits when changing files |
 | FOWNER | ->  It is necessary to provide access to files for processes that are not the owners of the files |
 | MKNOD | ->  Create special files using mknod(2) |
-| NET_RAW | -> Use RAW (IP, ICMP) and PACKET (app -> network) sockets; bind to any address for transparent proxying. |
+| NET_RAW | -> Use RAW (IP, ICMP) and PACKET (app -> network) sockets; bind to any address for transparent proxying |
 | SETGID | -> Make arbitrary manipulations of process GIDs and supplementary GID list |
 | SETUID | -> Make arbitrary manipulations of process UIDs |
 | SETFCAP | -> Set file capabilities |
-| SETPCAP | -> Фllows a process to manipulate the allowed set of capabilities of another process |
+| SETPCAP | -> Allows a process to manipulate the allowed set of capabilities of another process |
 | NET_BIND_SERVICE | -> Bind a socket to Internet domain privileged ports (port numbers less than 1024) |
 | SYS_CHROOT | -> This feature allows a process to use the chroot(2) system call to change the root directory |
 | KILL | -> Bypass permission checks for sending signals |

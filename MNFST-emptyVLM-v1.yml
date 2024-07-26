@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+        - name: test-1
+          image: amizory/k8s-practice:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 82
+          volumeMounts: #mount 
+            - name: volume-nginx-amizory
+              mountPath: /cache-1
+        - name: test-2
+          image: nginx
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          volumeMounts: #mount 
+            - name: volume-nginx-amizory
+              mountPath: /cache-2
+      volumes: #create volume
+        - name: volume-nginx-amizory
+          emptyDir: {}
