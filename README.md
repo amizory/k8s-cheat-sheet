@@ -15,6 +15,7 @@
 * [Context](#context)
 * [Security Capabilities](#security-capabilities)
 * [Helm (package manager)](#helm)
+* [Volumes](#volume)
 
 ## <a id="k8s-settings">Kubectl settings (cluster management)</a>
 
@@ -342,4 +343,15 @@ helm install <NAME> ./<PATH>
 helm install <NAME> ./<PATH> -f some-values.yaml
 
 helm upgrade <NAME> ./<PATH> --set replicaCount=2
+```
+
+### <a id="volume">Volumes</a>
+
+```sh
+  1 - emptyDir: {}  ---> allocates space on the node, share space between containers. If there are 2 pods, then the emptyDir inside each is different.
+  
+  kubectl exec -it <POD> -n <NAMESPACE> -- df -h
+
+  2 - hostPath: 
+        path: <exist-path-on-host> --> not recommended
 ```

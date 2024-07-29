@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-pv-pvc-hostpath-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test-pv-pvc-hostpath
+  template:
+    metadata:
+      labels:
+        app: test-pv-pvc-hostpath
+    spec:
+      containers:
+        - name: test-pv-pvc-hostpath-container
+          image: nginx
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /cache
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-data

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-hostpath
+  labels:
+    name: test-hostpath
+spec:
+  containers:
+    - name: test-hostpath-container
+      image: nginx
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: volume-nginx-hostpath
+          mountPath: /test-hostpath
+  volumes:
+    - name: volume-nginx-hostpath
+      hostPath:
+        type: Directory
+        path: <exist-path-on-host> #direction on host

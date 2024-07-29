@@ -21,9 +21,13 @@ spec:
               cpu: "500m"
           ports:
             - containerPort: 82
-          volumeMounts: #mount 
+          volumeMounts: #mount
             - name: volume-nginx-amizory
               mountPath: /cache-1
+              subPath: example #if mountPath pwd exist
+              readOnly: true #if we need a reading mode
+          command: [/bin/sh] #command
+          args: ["-c"] #command arguments
         - name: test-2
           image: nginx
           resources:
@@ -32,9 +36,11 @@ spec:
               cpu: "500m"
           ports:
             - containerPort: 80
-          volumeMounts: #mount 
+          volumeMounts: #mount
             - name: volume-nginx-amizory
               mountPath: /cache-2
       volumes: #create volume
         - name: volume-nginx-amizory
-          emptyDir: {}
+          #emptyDir: {}
+          emptyDir:
+            medium: memory
