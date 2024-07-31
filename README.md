@@ -124,8 +124,8 @@ kubectl -n <NAMESPACE> get pod -o yaml
 ### <a id="resource-quotas">Recourcequotas && LimitRange --> Namespace </a>
 
 ```sh
-kubectl get recourcequotas -n <NAMESPACE>
-kubectl describe resourcequota <NAME-RSQ> -n <NAMESPACE>
+kubectl get resourcequotas -n <NAMESPACE>
+kubectl describe resourcequotas <NAME-RSQ> -n <NAMESPACE>
 kubectl apply --namespace <NAMESPACE> -f RSQ.yml/LMTRNG.yml
 ```
 

@@ -22,3 +22,4 @@ spec:
       hostPath:
         type: Directory
         path: <exist-path-on-host> #direction on host
+        /run/desktop/mnt/host/c/test 
