@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   local:
-    path: C:\Users\jaine\Documents\data
+    path: /run/desktop/mnt/host/c/test #create folder in host-machine
   storageClassName: local-storage
   nodeAffinity:
     required:
