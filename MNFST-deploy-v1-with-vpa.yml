@@ -4,7 +4,7 @@ metadata:
   name: test-deployment
   labels:
     app: first-app
-    autor: Dmitry_Sakhno
+    author: Dmitry_Sakhno
 spec:
   replicas: 2
   selector:

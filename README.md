@@ -354,4 +354,23 @@ helm upgrade <NAME> ./<PATH> --set replicaCount=2
 
   2 - hostPath: 
         path: <exist-path-on-host> --> not recommended
+
+  3 - Persistent Volume (PV) & Persistent Volume Claim (PVC)
+    
+    ---> hostPath:        
+          path: /mnt/data
+          type: Directory, DirectoryOrCreate, FileOrCreate, File, ‌""
+
+      For single node testing only
+      WILL NOT WORK in a multi-node cluster
+
+    ---> local:
+          path: /run/desktop/mnt/host/c/test
+          
+    ---> other: csi, iscsi, fc, nfs 
+  
+  4 - StorageClass ---> need provisioner (~NFS, AWS EBS)
+
+      local -> don't work -> provisioner: kubernetes.io/no-provisioner 
+      
 ```
