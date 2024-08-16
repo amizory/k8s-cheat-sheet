@@ -39,4 +39,5 @@ alias kdelpv='kubectl delete pv'
 alias kdelpvc='kubectl delete pvc'
 alias kdelsts='kubectl delete sts'
 alias ll='ls -la'
+alias src='source'
 source <(kubectl completion bash)
