@@ -35,20 +35,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-pv-pvc-local
+  name: test-local
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: test-pv-pvc-local
+      app: test-local
   template:
     metadata:
       labels:
-        app: test-pv-pvc-local
+        app: test-local
     spec:
       containers:
-        - name: test-pv-pvc-local-container
-          image: nginx
+        - name: test-local-container
+          image: amizory/k8s-practice:v1
           resources:
             limits:
               memory: "128Mi"
@@ -62,3 +62,4 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: pvc-data
+

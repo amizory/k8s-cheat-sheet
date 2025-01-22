@@ -50,6 +50,87 @@
 | service | -> web-proxy/loadbalancer |
 | etcd | -> all info (cluster/deploy/resources/logs) |
 
+```txt
+Процесс создания
+
+1 - Парсинг файла: kubectl парсит файл deployment.yaml и извлекает из него информацию о 
+    ресурсах Kubernetes, которые необходимо создать или обновить.
+2 - Отправка запроса на API-server: kubectl отправляет запрос на создание или обновление
+    ресурсов в Kubernetes API-server, который работает на master node.
+3 - Валидация и авторизация: Kubernetes API-server проверяет валидность запроса и авторизует 
+    его, используя информацию о пользователе и ролях.
+4 - Создание или обновление ресурсов: Если запрос валиден и авторизован, Kubernetes API-server
+    создает или обновляет ресурсы в соответствии с информацией из файла deployment.yaml.
+5 - Обновление etcd: Kubernetes API-server обновляет данные в etcd, который является
+    распределенным хранилищем ключ-значение для Kubernetes и работает на master node.
+6 - Уведомление контроллера: Kubernetes API-server отправляет уведомление контроллеру (например,
+    Deployment контроллеру) о создании или обновлении ресурсов.
+7 - Обновление контроллера: Контроллер получает уведомление и начинает обновлять соответствующие
+    ресурсы (например, поды).
+8 - Распределение задач на worker nodes: Контроллер распределяет задачи на worker nodes, 
+    которые выполняют фактическую работу по созданию или обновлению ресурсов.
+9 - Выполнение задач на worker nodes: Worker nodes выполняют задачи, которые им были назначены
+    контроллером, и создают или обновляют ресурсы в соответствии с информацией из файла 
+    deployment.yaml
+```
+
+```txt
+  Reconciliation loop - это процесс, который происходит в Kubernetes, когда контроллеры
+(например, Deployment контроллер) постоянно проверяют текущее состояние ресурсов и сравнивают
+его с желаемым состоянием, указанным в конфигурации.
+
+  Если текущее состояние ресурсов не соответствует желаемому состоянию, контроллеры выполняют
+действия для приведения ресурсов в соответствие с желаемым состоянием. Этот процесс повторяется
+постоянно, чтобы обеспечить, что ресурсы всегда находятся в желаемом состоянии.
+
+Reconciliation loop состоит из следующих шагов:
+1 - Чтение текущего состояния: Контроллеры читают текущее состояние ресурсов.
+2 - Сравнение с желаемым состоянием: Контроллеры сравнивают текущее состояние ресурсов с
+    желаемым состоянием, указанным в конфигурации.
+3 - Определение необходимости действий: Если текущее состояние ресурсов не соответствует
+    желаемому состоянию, контроллеры определяют необходимость выполнения действий для
+    приведения ресурсов в соответствие с желаемым состоянием.
+4 - Выполнение действий: Контроллеры выполняют действия для приведения ресурсов в соответствие
+    с желаемым состоянием.
+5 - Повторение цикла: Контроллеры повторяют цикл, чтобы постоянно проверять текущее состояние
+    ресурсов и сравнивать его с желаемым состоянием.
+
+Controller Manager использует следующий способ для реализации reconciliation loop:
+
+- Watch API: Controller Manager использует Watch API для наблюдения за ресурсами и получает
+  уведомления о изменениях в ресурсах.
+- List-Watch: Controller Manager использует List-Watch для получения списка ресурсов и
+  наблюдения за изменениями в ресурсах.
+- Event-driven: Controller Manager использует event-driven подход для обработки событий и
+  выполнения действий в ответ на изменения в ресурсах.
+```
+
+```txt
+  Алгоритм Raft - это алгоритм консенсуса, разработанный для управления распределенными 
+системами. Он позволяет группе машин (называемых узлами) согласовывать свои действия и 
+достигать консенсуса, даже в случае сбоя некоторых узлов.
+  
+  Количество мастер-нод в кластере etcd, работающем по алгоритму Raft, связано с тем, что для 
+достижения консенсуса требуется большинство голосов. Чтобы обеспечить работоспособность
+кластера, необходимо иметь нечетное количество мастер-нод, чтобы в случае разделения кластера
+на две части, одна из них имела большинство голосов. Обычно рекомендуется использовать 3 или 5
+мастер-нод в кластере etcd, чтобы обеспечить высокую доступность и устойчивость к сбоям.
+Нечетное количество мастер-нод необходимо для того, чтобы избежать ситуации, когда кластер
+разделен на две равные части, и ни одна из них не имеет большинства голосов.
+
+  Если бы количество мастер-нод было четным, например 4, то в случае разделения кластера на
+две части, каждая часть бы имела по 2 мастер-ноды. В этом случае ни одна из частей не имела бы
+большинства голосов, и кластер не смог бы принять решения. Нечетное количество мастер-нод
+гарантирует, что в случае разделения кластера, одна из частей будет иметь большинство голосов,
+и кластер сможет продолжать работать.
+
+  Например, если количество мастер-нод равно 3, то в случае разделения кластера на две части,
+одна часть будет иметь 2 мастер-ноды, а другая - В этом случае часть с 2 мастер-нодами будет
+иметь большинство голосов и сможет продолжать работать. В контексте etcd, алгоритм Raft
+используется для управления распределенным ключ-значение хранилищем. Etcd - это распределенное
+хранилище ключ-значение, которое позволяет хранить и получать данные в распределенной системе.
+```
+
 ### <a id="version">Version/info</a>
 
 ```bash
@@ -91,7 +172,10 @@ kubectl [command]
                     port-forward <NAME> :<CONTAINER_PORT> ---> add random local port
 
 #Fast IP pods
-kubectl get pod -o jsonpath='{.items[*].status.podIP}'
+kubectl get pods -o jsonpath='{.items[*].status.podIP}'
+
+#Pods (in Node)
+kubectl get pods --field-selector spec.nodeName=... -A -o wide
 ```
 
 ### <a id="manipulation">Manipulation</a>
@@ -167,7 +251,9 @@ kubectl scale deployment <NAME> --replicas <NUMBER>
 kubectl get rs
 
 #Horizontal scale / Show horizontal set
-kubectl autoscale deployment <NAME> --min=<NUMBER> --max=<NUMBER> --cpu-percent=<NUMBER>
+kubectl autoscale deployment <NAME> --min=<NUMBER>
+                                    --max=<NUMBER> 
+                                    --cpu-percent=<NUMBER>
 kubectl get hpa
 
 #History / status deploy
@@ -259,10 +345,11 @@ kubectl describe ing (NAME_INGRESS)
 ### <a id="context">Context (cluster + namespace + user)</a>
 
 ```sh
-kubectl config get-contexts                                                            ---> info
+kubectl config get-contexts                                    ---> info
 kubectl config current-context
-kubectl config use-context <NAME>                                                      ---> swap
-kubectl config set-context <NAME> --cluster=<NAME_CLUSTER> --namespace=<NAME_NAMESPACE> ---> create
+kubectl config use-context <NAME>                              ---> swap
+kubectl config set-context <NAME> --cluster=<NAME_CLUSTER> 
+                                  --namespace=<NAME_NAMESPACE> ---> create
 
 ---> kubectx 
 kubectx -
@@ -342,13 +429,23 @@ helm [command]
 helm install <NAME> ./<PATH> 
 helm install <NAME> ./<PATH> -f some-values.yaml
 
+helm install my-release my-chart --dry-run --output-dir ./manifests
+
 helm upgrade <NAME> ./<PATH> --set replicaCount=2
+helm template my-release my-chart
+helm template my-release my-chart --output-dir ./manifests
+
+helm list -A
+helm dependency ls -A
+helm rollback my-release 1
+helm history my-release
 ```
 
 ### <a id="volume">Volumes</a>
 
 ```sh
-  1 - emptyDir: {}  ---> allocates space on the node, share space between containers. If there are 2 pods, then the emptyDir inside each is different.
+  1 - emptyDir: {}  ---> allocates space on the node, share space between containers. If there 
+  are 2 pods, then the emptyDir inside each is different.
   
   kubectl exec -it <POD> -n <NAMESPACE> -- df -h
 
